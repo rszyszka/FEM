@@ -29,7 +29,7 @@ public class GlobalData {
         this.nH = input.nextInt();
         input.findInLine(";");
         this.nB = input.nextInt();
-        
+
         ne = (nH - 1) * (nB - 1);
         nh = nH * nB;
     }

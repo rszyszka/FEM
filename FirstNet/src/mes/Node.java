@@ -23,7 +23,7 @@ public class Node {
         this.x = x;
         this.y = y;
 
-        if (this.x == 0.0 || this.y == 0.0 || this.x >= GD.getB() || this.y >= GD.getH()) {
+        if (this.x == 0.0 || this.y == 0.0 || this.x == GD.getB() || this.y == GD.getH()) {
             this.status = 1;
         } else {
             this.status = 0;

@@ -19,20 +19,20 @@ public class Grid {
         GD = new GlobalData();
         ND = new Node[GD.getNh()];
         EL = new Element[GD.getNe()];
-        
+
         double db = GD.getB() / (GD.getnB() - 1);
         double dh = GD.getH() / (GD.getnH() - 1);
 
         int k = 0;
         for (int i = 0; i < GD.getnB(); i++) {
             for (int j = 0; j < GD.getnH(); j++) {
-                ND[k++] = new Node(i*db, j*dh);
+                ND[k++] = new Node(i * db, j * dh);
             }
         }
         k = 0;
-        
-        for (int i = 0; i < GD.getnB()-1; i++) {
-            for (int j = 0; j < GD.getnH()-1; j++ ) {
+
+        for (int i = 0; i < GD.getnB() - 1; i++) {
+            for (int j = 0; j < GD.getnH() - 1; j++) {
                 EL[k++] = new Element(i, j, db, dh);
             }
         }
