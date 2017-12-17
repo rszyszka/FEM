@@ -18,10 +18,11 @@ public class Node {
     private final GlobalData GD;
 
     public Node(double x, double y) throws FileNotFoundException {
-        GD = new GlobalData();
+        GD = GlobalData.getInstance();
 
         this.x = x;
         this.y = y;
+        this.t = GD.getT_begin();
 
         if (this.x == 0.0 || this.y == 0.0 || this.x == GD.getB() || this.y == GD.getH()) {
             this.status = 1;

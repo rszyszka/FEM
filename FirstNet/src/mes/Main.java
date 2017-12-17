@@ -3,6 +3,7 @@
  */
 package mes;
 
+import calka.UkladyRownanLiniowych;
 import java.io.FileNotFoundException;
 
 /**
@@ -17,46 +18,27 @@ public class Main {
      */
     public static void main(String[] args) throws FileNotFoundException {
 
-        Grid grid = new Grid();
-        GlobalData gd = new GlobalData();
-//         grid.wypiszND();
-//        grid.wypiszEL(0);
-//        System.out.println("\n");
-//        grid.wypiszEL(gd.getnH() - 2);
-//        System.out.println("\n");
-//        grid.wypiszEL(gd.getNe() - (gd.getnH() - 1));
-//        System.out.println("\n");
-//        grid.wypiszEL(gd.getNe() - 1);
+        GlobalData gd = GlobalData.getInstance();
+        Grid grid = Grid.getInstance();
+        double[] t;
 
-        double x[] = {-2, 1, 1, -1};
-        double y[] = {-1, -1, 1, 1};
+        for (int itau = 0; itau < gd.getTau(); itau++) {
+            gd.compute();
+            t = UkladyRownanLiniowych.gaussElimination(gd.getNh(), gd.getH_global(), gd.getP_global());
+            for (int i = 0; i < gd.getNh(); i++) {
+                grid.ND[i].setT(t[i]);
+            }
+        }
 
-        double jak[][] = jakobian(grid.EL[0], x, y);
-
-        wypiszJakobian(jak);
-
-    }
-
-    public static double[][] jakobian(Element el, double x[], double y[]) {
-
-        double[][] J = new double[2][2];
-        J[0][0] = el.dN_dKsi[0][0] * x[0] + el.dN_dKsi[0][1] * x[1] + el.dN_dKsi[0][2] * x[2] + el.dN_dKsi[0][3] * x[3];
-        J[0][1] = el.dN_dKsi[0][0] * y[0] + el.dN_dKsi[0][1] * y[1] + el.dN_dKsi[0][2] * y[2] + el.dN_dKsi[0][3] * y[3];
-        J[1][0] = el.dN_dEta[0][0] * x[0] + el.dN_dEta[0][1] * x[1] + el.dN_dEta[0][2] * x[2] + el.dN_dEta[0][3] * x[3];
-        J[1][1] = el.dN_dEta[0][0] * y[0] + el.dN_dEta[0][1] * y[1] + el.dN_dEta[0][2] * y[2] + el.dN_dEta[0][3] * y[3];
-
-        return J;
-    }
-
-    public static void wypiszJakobian(double[][] J) {
-
-        System.out.println("Jakobian:");
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                System.out.print(+J[i][j] + "\t");
+        int count = 0;
+        for (int i = 0; i < gd.getnB(); i++) {
+            for (int j = 0; j < gd.getnH(); j++) {
+                System.out.printf("%.15f\t", grid.ND[count++].getT());
             }
             System.out.println("");
         }
+        System.out.println("\n\n");
+
     }
 
 }

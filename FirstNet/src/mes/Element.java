@@ -11,68 +11,62 @@ import java.io.FileNotFoundException;
  */
 public class Element {
 
-    public Node ID[];
+    public Node[] ND; // wezly w elemencie
+    public Surface POW[]; //powierzchnie elementu
 
-    public double dN_dKsi[][];
-    public double dN_dEta[][];
+    private int n_pow; // liczba powierzchni ktore kontaktuja sie z otoczeniem
+    private final int[] a_pow; // lokalne numery powierzchni kontaktowych elementu
 
-    public Element(int i, int j, double db, double dh) throws FileNotFoundException {
+    public int[] globalNodeID;
 
-        ID = new Node[4];
+    GlobalData GD;
 
-        ID[0] = new Node(i * db, j * dh);
-        ID[1] = new Node((i + 1) * db, j * dh);
-        ID[2] = new Node((i + 1) * db, (j + 1) * dh);
-        ID[3] = new Node(i * db, (j + 1) * dh);
+    public Element(int i, int j, Node[] nodes) throws FileNotFoundException { //db - szerokosc 1 elementu, dh - wysokosc 1 elementu
 
-        dN_dKsi = new double[4][4];
-        dN_dEta = new double[4][4];
+        ND = new Node[4];
+        POW = new Surface[4];
+        globalNodeID = new int[4];
+        GD = GlobalData.getInstance();
 
+        //wyznaczamy wspolrzedne wezlow w elemencie
+        ND[0] = nodes[0];
+        ND[1] = nodes[1];
+        ND[2] = nodes[2];
+        ND[3] = nodes[3];
+
+        //wyznaczamy globalne id wezlow w elemencie
+        globalNodeID[0] = GD.getnH() * i + j;
+        globalNodeID[1] = GD.getnH() * (i + 1) + j;
+        globalNodeID[2] = GD.getnH() * (i + 1) + (j + 1);
+        globalNodeID[3] = GD.getnH() * i + (j + 1);
+
+        //wezly na powierzchniach
+        POW[0] = new Surface(ND[3], ND[0]);
+        POW[1] = new Surface(ND[0], ND[1]);
+        POW[2] = new Surface(ND[1], ND[2]);
+        POW[3] = new Surface(ND[2], ND[3]);
+
+        n_pow = 0;
         for (int k = 0; k < 4; k++) {
-            dN_dKsi[k][0] = dN1dKsi(ID[k].getX(), ID[k].getY());
-            dN_dKsi[k][1] = dN2dKsi(ID[k].getX(), ID[k].getY());
-            dN_dKsi[k][2] = dN3dKsi(ID[k].getX(), ID[k].getY());
-            dN_dKsi[k][3] = dN4dKsi(ID[k].getX(), ID[k].getY());
-
-            dN_dEta[k][0] = dN1dEta(ID[k].getX(), ID[k].getY());
-            dN_dEta[k][1] = dN2dEta(ID[k].getX(), ID[k].getY());
-            dN_dEta[k][2] = dN3dEta(ID[k].getX(), ID[k].getY());
-            dN_dEta[k][3] = dN4dEta(ID[k].getX(), ID[k].getY());
-
+            if (POW[k].getNodes()[0].getStatus() == 1 && POW[k].getNodes()[1].getStatus() == 1) {
+                n_pow++;
+            }
         }
+        a_pow = new int[n_pow];
 
+        int counter = 0;
+        for (int k = 0; k < 4; k++) {
+            if (POW[k].getNodes()[0].getStatus() == 1 && POW[k].getNodes()[1].getStatus() == 1) {
+                a_pow[counter++] = k;
+            }
+        }
     }
 
-    private double dN1dKsi(double ksi, double eta) {
-        return -0.25 * (1 - eta);
+    public int getN_pow() {
+        return n_pow;
     }
 
-    private double dN2dKsi(double ksi, double eta) {
-        return 0.25 * (1 - eta);
+    public int[] getA_pow() {
+        return a_pow;
     }
-
-    private double dN3dKsi(double ksi, double eta) {
-        return 0.25 * (1 + eta);
-    }
-
-    private double dN4dKsi(double ksi, double eta) {
-        return -0.25 * (1 + eta);
-    }
-
-    private double dN1dEta(double ksi, double eta) {
-        return -0.25 * (1 - ksi);
-    }
-
-    private double dN2dEta(double ksi, double eta) {
-        return -0.25 * (1 + ksi);
-    }
-
-    private double dN3dEta(double ksi, double eta) {
-        return 0.25 * (1 + ksi);
-    }
-
-    private double dN4dEta(double ksi, double eta) {
-        return 0.25 * (1 - ksi);
-    }
-
 }
