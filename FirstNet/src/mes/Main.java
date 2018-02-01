@@ -19,10 +19,10 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
         GlobalData gd = GlobalData.getInstance();
-        Grid grid = Grid.getInstance();
+        Grid grid = Grid.getInstance();   
         double[] t;
 
-        for (int itau = 0; itau < gd.getTau(); itau++) {
+        for (int itau = 0; itau < gd.getTau(); itau+=gd.getDtau()) {
             gd.compute();
             t = UkladyRownanLiniowych.gaussElimination(gd.getNh(), gd.getH_global(), gd.getP_global());
             for (int i = 0; i < gd.getNh(); i++) {

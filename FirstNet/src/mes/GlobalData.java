@@ -126,7 +126,7 @@ public class GlobalData {
 
                     t0p += temp_0[j] * el_lok.getN()[pc][j];
                 }
-                detj = Math.abs(jakobian.getDet());
+                detj = Math.abs(jakobian.getDet()) ;
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
                         cij = c * ro * el_lok.getN()[pc][i] * el_lok.getN()[pc][j] * detj;

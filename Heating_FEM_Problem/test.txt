@@ -1,0 +1,6 @@
+500	c_stali		cieplo wlasciwe ¿eliwa szarego, J/Ckg;
+16,3	k_stali		wspolczynnik przewodzenia ciepla ¿eliwa szarego, W/cm2;
+7900	ro_stali	gestosc ¿eliwa szarego, kg/m3;
+850	c_zeliwa	cieplo wlasciwe ¿eliwa szarego, J/Ckg;
+56	k_zeliwa	wspolczynnik przewodzenia ciepla ¿eliwa szarego, W/cm2;
+7250	ro_zeliwa	gestosc ¿eliwa szarego, kg/m3;

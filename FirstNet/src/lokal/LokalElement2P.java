@@ -27,13 +27,14 @@ public class LokalElement2P {
     private final double dN_dEta[][];
 
     private final double N[][];
-
+    
     private static LokalElement2P lokalElement2P = null;
 
     private LokalElement2P() {
 
         dN_dKsi = new double[4][4];
         dN_dEta = new double[4][4];
+       
         N = new double[4][4];
 
         for (int i = 0; i < 4; i++) { //wypelniamy macierze funkcji ksztaltu
